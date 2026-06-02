@@ -15,17 +15,17 @@
 
 ## 📋 Project Overview
 
-A comprehensive analysis of the **German E-Commerce job market** based on **1,581 real job postings** from LinkedIn, Glassdoor, and Stepstone (October 2025).
+A comprehensive analysis of the **German E-Commerce job market** based on **1,581 cleaned job postings** aggregated from LinkedIn, Glassdoor, and Stepstone. The project monitors market dynamics over a 6-month period culminating in October 2025.
 
 ### 🎯 Key Questions Answered
 
-| Question | Insight |
-|----------|---------|
-| **Where** are the main e-commerce job hubs? | Berlin (391 jobs), Hamburg, Munich, Cologne |
-| **What** are the most requested skills? | Marketing (64%), E-Commerce (57%), Management (39%) |
-| **How** do skills change by seniority? | Entry level focuses on Marketing; Executive requires Leadership |
-| **What** is the market trend? | Steady growth over the last 6 months |
-| **Who** are the top employers? | Amazon, Zalando, Delivery Hero, Westwing |
+| Question | Analytical Goal |
+|----------|-----------------|
+| **Where** are the main e-commerce job hubs? | Identify the top hiring cities and regional job density across Germany. |
+| **What** are the most requested skills? | Map the core technical capabilities and soft skills required by employers. |
+| **How** do skills change by seniority? | Analyze skill requirements across different career stages (Entry vs. Executive). |
+| **What** is the market trend? | Track the volume and stability of job postings over a 6-month timeline. |
+| **Who** are the top employers? | Discover the major companies driving the e-commerce recruitment market. |
 
 ---
 
@@ -47,7 +47,7 @@ A comprehensive analysis of the **German E-Commerce job market** based on **1,58
 
 - **Experience Level** (Entry, Mid-Senior, Executive, etc.)
 - **Contract Type** (Full-time, Part-time, Internship)
-- **Month/Date Range** (for trends)
+- **Month/Date Range** (for trends exploration)
 
 ---
 
@@ -65,24 +65,52 @@ A comprehensive analysis of the **German E-Commerce job market** based on **1,58
 ---
 
 ## 📁 Project Structure
+
+```text
 e-commerce-job-analysis/
-├── dashboard/ # Plotly Dash application
-│ ├── app.py # Main Dash application
-│ ├── data_loader.py # Data loading utilities
-│ ├── components/ # Reusable Dash components
-│ ├── assets/ # CSS and static assets
-│ ├── data/ # Processed dataset (1,581 jobs)
-│ └── requirements.txt # Python dependencies
+├── dashboard/                              # Plotly Dash interactive dashboard
+│   ├── components/                         # Reusable Dash UI components
+│   │   ├── career_components.py            # Career progression visualizations
+│   │   ├── map_components.py               # Geographic maps (choropleth, bubble)
+│   │   ├── skills_components.py            # Skills analysis (treemap, heatmap)
+│   │   └── temporal_components.py          # Time-based trends charts
+│   ├── assets/                             # Static files
+│   │   └── style.css                       # Custom CSS styling
+│   ├── data/                               # Dashboard datasets
+│   │   ├── city_coordinates.json           # City coordinates for maps
+│   │   └── E_Commers_jobs_done.json        # Final cleaned dataset (1,581 jobs)
+│   ├── app.py                              # Main Dash application entry point
+│   ├── data_loader.py                      # Data loading utilities
+│   └── requirements.txt                    # Python dependencies
 │
-├── ecommerce_pipeline/ # ETL Pipeline
-│ └── e_commerces_etl.py # Complete data processing pipeline
+├── ecommerce_pipeline/                                 # ETL data processing pipeline
+│   ├── data/                                           # Data storage
+│   │   ├── helpers/                                    # Helper files for data processing
+│   │   │   ├── unique_skills_combined.json             # Master list of unique skills (605)
+│   │   │   ├── job_title.json                          # Relevant job titles for filtering
+│   │   │   ├── statistics.json                         # Generated statistics from analysis
+│   │   │   └── location_reports/                       # Location analysis reports
+│   │   │       ├── incomplete_locations.json           # Jobs missing region data
+│   │   │       └── location_analysis.json              # Location format analysis
+│   │   ├── processed/                                  # Cleaned, step-by-step data
+│   │   │   ├── 01_e_commers_jobs.json                  # Step 1: Raw normalized jobs
+│   │   │   ├── 02_e_commers_jobs_with_skills.json      # Step 2: Skills extracted
+│   │   │   ├── 03_e_commers_jobs_filtered.json         # Step 3: Filtered by title
+│   │   │   ├── 04_e_commers_jobs_locations_split.json  # Step 4: Locations split
+│   │   │   └── 05_e_commers_jobs_final.json            # Step 5: Final clean data
+│   │   └── raw/                                        # Raw source data
+│   │       ├── dataset_linkedin_e_com.json             # LinkedIn raw jobs
+│   │       ├── dataset_glassdoor_e_com.json            # Glassdoor raw jobs
+│   │       └── dataset_stepstone_e_com.json            # Stepstone raw jobs
+│   └── e_commerces_etl.py                              # Complete ETL pipeline script
 │
-├── notebooks/ # Jupyter notebooks for analysis
-│ ├── E_Commers_Analysis.ipynb
-│ ├── Title_and_description.ipynb
-│ └── LinkedIn_Parser.ipynb
+├── notebooks/                                          # Jupyter notebooks for exploration
+│   └── E_Commers_Analysis.ipynb                        # Main analysis notebook
 │
-└── runway/ # Legacy/backup files (git ignored)
+├── runway/                                             # Legacy/backup files (git ignored)
+├── .gitignore                                          # Git ignore rules
+└── LICENSE                                             # MIT License
+ ```
 
 ---
 
@@ -95,6 +123,10 @@ e-commerce-job-analysis/
 | Hamburg | ~150 | ~9.5% |
 | Munich | ~120 | ~7.6% |
 | Cologne | ~80 | ~5.1% |
+
+```text
+Primary Employers: Amazon, Zalando, Delivery Hero, Westwing.
+```
 
 ### 🔧 Most In-Demand Skills
 | Skill | % of Jobs |
@@ -110,12 +142,6 @@ e-commerce-job-analysis/
 - **Part-time:** 9%
 - **Contract:** 7%
 
-### 🎓 Recommendations for Graduates
-1. **Invest in Digital Marketing & Google Analytics**
-2. **Learn E-Commerce fundamentals** (platforms, logistics, customer journey)
-3. **German language is a major differentiator**
-4. **Target roles:** Online Marketing Manager, E-Commerce Specialist
-
 ### 💰 Salary Progression (E-Commerce Track)
 | Stage | Salary (€K) |
 |-------|-------------|
@@ -125,31 +151,12 @@ e-commerce-job-analysis/
 | Senior | 70-90+ |
 | Lead/Manager | 90-120+ |
 
+### 🎓 Recommendations for Graduates
+1. **Invest in Digital Marketing & Google Analytics**
+2. **Learn E-Commerce fundamentals** (platforms, logistics, customer journey)
+3. **German language is a major differentiator**
+4. **Target roles:** Online Marketing Manager, E-Commerce Specialist
 ---
-
-## 🚀 Local Setup for interactive dashboard
-
-### Prerequisites
-- Python 3.13+
-- pip package manager
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/iuriestratulat/e-commerce-job-analysis.git
-cd e-commerce-job-analysis
-
-# Navigate to dashboard
-cd dashboard
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the dashboard
-python app.py 
-
-```
 
 ## 🔧 ETL Pipeline
 
@@ -166,3 +173,28 @@ The pipeline processes **5,178 raw job postings** and outputs **1,581 high-quali
 ```bash
 cd ecommerce_pipeline
 python e_commerces_etl.py
+```
+
+## 🚀 Local Setup for interactive dashboard
+
+### Prerequisites
+- Python 3.13+
+- pip package manager
+
+### Installation
+
+```bash
+# Clone the repository
+git clonehttps://github.com/iuriestratulat/E-Commerce-Job-Analysis-Germany-Market.git
+cd e-commerce-job-analysis
+
+# Navigate to dashboard
+cd dashboard
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the dashboard
+python app.py 
+```
+
