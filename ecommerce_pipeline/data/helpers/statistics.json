@@ -1,0 +1,145 @@
+{
+    "total_jobs": 1581,
+    "sources": {
+        "linkedin": 1496,
+        "glassdoor": 49,
+        "stepstone": 36
+    },
+    "experience_levels": {
+        "Mid-Senior level": 566,
+        "Associate": 172,
+        "Not Applicable": 89,
+        "Entry level": 593,
+        "Executive": 6,
+        "Internship": 49,
+        "Director": 21,
+        "null": 49,
+        "N/A": 36
+    },
+    "job_types": {
+        "Full-time": 1345,
+        "Part-time": 119,
+        "Contract": 31,
+        "Internship": 31,
+        "Temporary": 1,
+        "Other": 9,
+        "null": 44,
+        "Apprentice/Trainee": 1
+    },
+    "top_20_skills": [
+        [
+            "Marketing",
+            984
+        ],
+        [
+            "E-Commerce",
+            864
+        ],
+        [
+            "E-commerce",
+            864
+        ],
+        [
+            "Management",
+            606
+        ],
+        [
+            "IT",
+            388
+        ],
+        [
+            "Sales",
+            376
+        ],
+        [
+            "SEO",
+            367
+        ],
+        [
+            "Analytics",
+            332
+        ],
+        [
+            "German",
+            330
+        ],
+        [
+            "KPIs",
+            319
+        ],
+        [
+            "English",
+            307
+        ],
+        [
+            "Development",
+            294
+        ],
+        [
+            "Design",
+            275
+        ],
+        [
+            "Instagram",
+            267
+        ],
+        [
+            "Digital marketing",
+            246
+        ],
+        [
+            "Digital Marketing",
+            246
+        ],
+        [
+            "Training",
+            217
+        ],
+        [
+            "Google Analytics",
+            216
+        ],
+        [
+            "Reporting",
+            207
+        ],
+        [
+            "Google Ads",
+            199
+        ]
+    ],
+    "top_20_cities": {
+        "Berlin": 192,
+        "Hamburg": 127,
+        "Munich": 111,
+        "Cologne": 59,
+        "Düsseldorf": 55,
+        "Frankfurt": 37,
+        "Stuttgart": 22,
+        "Frankfurt am Main": 19,
+        "Leipzig": 17,
+        "Göttingen": 13,
+        "Münster": 13,
+        "Bremen": 13,
+        "Dortmund": 12,
+        "Dresden": 12,
+        "Karlsruhe": 11,
+        "Würzburg": 10,
+        "Nuremberg": 10,
+        "Neuss": 9,
+        "Hannover": 9,
+        "Mannheim": 9
+    },
+    "top_regions": {
+        "North Rhine-Westphalia": 291,
+        "Bavaria": 251,
+        "Berlin": 192,
+        "Baden-Württemberg": 171,
+        "Hamburg": 127,
+        "Hesse": 117,
+        "Lower Saxony": 78,
+        "Saxony": 37,
+        "Rhineland-Palatinate": 31,
+        "Schleswig-Holstein": 22
+    }
+}
