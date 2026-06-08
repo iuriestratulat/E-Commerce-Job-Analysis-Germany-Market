@@ -27,10 +27,10 @@ from components.career_components import (
     create_job_source_chart
 )
 
-# Inițializare aplicație
 app = dash.Dash(__name__, 
                 external_stylesheets=[dbc.themes.BOOTSTRAP],
-                assets_folder='assets')
+                assets_folder='assets',
+                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0'}])
 
 # Încărcare date
 df = load_data()
@@ -108,51 +108,55 @@ app.layout = dbc.Container([
     # Tabs pentru navigare
     dbc.Tabs([
         # Tab 1: Prezentare generală
-            dbc.Tab(label="📊 Overview", children=[
-            # Rândul 1: 4 carduri egale
+        dbc.Tab(label="📊 Overview", children=[
+            # Rândul 1: 4 carduri responsive (2x2 pe telefon, 4 pe desktop)
             dbc.Row([
                 dbc.Col(dbc.Card([
                     dbc.CardBody([
                         html.H4("Total Jobs Analyzed", className="card-title"),
                         html.H2(f"{len(df):,}", className="card-text text-primary")
                     ])
-                ], color="light"), width=3),
+                ], color="light"), width={"size": 6, "md": 3}),
                 dbc.Col(dbc.Card([
                     dbc.CardBody([
                         html.H4("Time Period", className="card-title"),
                         html.H2("Last 6 Months", className="card-text text-success")
                     ])
-                ], color="light"), width=3),
+                ], color="light"), width={"size": 6, "md": 3}),
                 dbc.Col(dbc.Card([
                     dbc.CardBody([
                         html.H4("Top City", className="card-title"),
                         html.H2(f"{top_city}", className="card-text text-info")
                     ])
-                ], color="light"), width=3),
+                ], color="light"), width={"size": 6, "md": 3}),
                 dbc.Col(dbc.Card([
                     dbc.CardBody([
                         html.H4("Top Skill", className="card-title"),
                         html.H2(f"{top_skill}", className="card-text text-warning")
                     ])
-                ], color="light"), width=3),
+                ], color="light"), width={"size": 6, "md": 3}),
             ], className="mb-4"),
             
-            # Rândul 2: Top Skills (6) + Contract Type (6)
+            # Rândul 2: Top Skills (full width pe telefon, jumate pe desktop)
             dbc.Row([
-                dbc.Col(dcc.Graph(figure=create_skills_bar_chart(skills_df)), width=6),
-                dbc.Col(dcc.Graph(figure=create_contract_type_chart(df)), width=6),
+                dbc.Col(dcc.Graph(figure=create_skills_bar_chart(skills_df)), 
+                       width={"size": 12, "md": 6}, className="mb-3 mb-md-0"),
+                dbc.Col(dcc.Graph(figure=create_contract_type_chart(df)), 
+                       width={"size": 12, "md": 6}),
             ], className="mb-4"),
             
-            # Rândul 3: Top Companies (6) + Job Source Distribution (6)
+            # Rândul 3: Top Companies + Job Source Distribution
             dbc.Row([
-                dbc.Col(dcc.Graph(figure=create_top_companies_chart(df)), width=6),
-                dbc.Col(dcc.Graph(figure=create_job_source_chart(df)), width=6),
+                dbc.Col(dcc.Graph(figure=create_top_companies_chart(df)), 
+                       width={"size": 12, "md": 6}, className="mb-3 mb-md-0"),
+                dbc.Col(dcc.Graph(figure=create_job_source_chart(df)), 
+                       width={"size": 12, "md": 6}),
             ]),
-        ]),    
+        ]),   
         
         # Tab 2: Geographic Analysis - Versiunea cu carduri
         dbc.Tab(label="🗺️ Geographic Analysis", children=[
-            # Rândul 1: Filtre (2 coloane)
+            # Rândul 1: Filtre (2 coloane) - responsive
             dbc.Row([
                 dbc.Col([
                     html.Label("Filter by Experience Level:", className="fw-bold"),
@@ -163,7 +167,7 @@ app.layout = dbc.Container([
                         value='all',
                         clearable=False
                     )
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 dbc.Col([
                     html.Label("Filter by Contract Type:", className="fw-bold"),
                     dcc.Dropdown(
@@ -173,12 +177,11 @@ app.layout = dbc.Container([
                         value='all',
                         clearable=False
                     )
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ], className="mb-4"),
             
-            # Rândul 2: Graficele (2 coloane egale)
+            # Rândul 2: Graficele (unul sub altul pe telefon, unul lângă altul pe desktop)
             dbc.Row([
-                # Coloana 1: Bar Chart pentru Regiuni
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4(id='region-chart-title', className="text-center mb-0")),
@@ -186,9 +189,8 @@ app.layout = dbc.Container([
                             dcc.Graph(id='choropleth-map', style={'height': '500px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),  # width=6 = jumătate
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
-                # Coloana 2: Bubble Map pentru Orașe
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4(id='bubble-map-title', className="text-center mb-0")),
@@ -196,7 +198,7 @@ app.layout = dbc.Container([
                             dcc.Graph(id='bubble-map', style={'height': '500px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),  # width=6 = jumătate
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
         ]),
 
@@ -213,12 +215,11 @@ app.layout = dbc.Container([
                         value='all',
                         clearable=False
                     )
-                ], width=4, className="mb-3"),
+                ], width={"size": 12, "md": 4}, className="mb-3"),
             ], className="mb-4"),
             
-            # Rândul 2: Top 15 Skills + Word Cloud (două coloane)
+            # Rândul 2: Top 15 Skills + Word Cloud (unul sub altul pe telefon)
             dbc.Row([
-                # Coloana 1: Top 15 Skills Bar Chart
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4(id='skills-bar-title', className="text-center mb-0")),
@@ -226,9 +227,8 @@ app.layout = dbc.Container([
                             dcc.Graph(id='skills-bar-chart', style={'height': '500px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
-                # Coloana 2: Word Cloud
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4("🌳 Skills Treemap", className="text-center mb-0")),
@@ -236,10 +236,10 @@ app.layout = dbc.Container([
                             dcc.Graph(id='word-cloud-plot', style={'height': '500px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ], className="mb-4"),
             
-            # Rândul 3: Skills Distribution by Region (Heatmap)
+            # Rândul 3: Skills Distribution by Region (full width)
             dbc.Row([
                 dbc.Col([
                     dbc.Card([
@@ -252,7 +252,7 @@ app.layout = dbc.Container([
             ]),
         ]),
         
-        # Tab 4: Job Distribution - Format 2x2 cu tooltip-uri
+        # Tab 4: Job Distribution
         dbc.Tab(label="💼 Job Distribution", children=[
             # Rândul 1: Experience Level + Contract Type
             dbc.Row([
@@ -285,7 +285,7 @@ app.layout = dbc.Container([
                             dcc.Graph(id='experience-level-chart', style={'height': '400px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
                 dbc.Col([
                     dbc.Card([
@@ -316,7 +316,7 @@ app.layout = dbc.Container([
                             dcc.Graph(id='contract-type-chart', style={'height': '400px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ], className="mb-3"),
             
             # Rândul 2: Work Type + Company Market Share
@@ -347,7 +347,7 @@ app.layout = dbc.Container([
                             dcc.Graph(id='work-type-chart', style={'height': '400px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
                 dbc.Col([
                     dbc.Card([
@@ -375,11 +375,11 @@ app.layout = dbc.Container([
                             dcc.Graph(id='company-market-share', style={'height': '400px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
         ]),
 
-        # Tab 5: Career Progression - CU DECOMPOSITION TREE
+        # Tab 5: Career Progression
         dbc.Tab(label="🎯 Career Progression", children=[
             # Rândul 1: Filtru Experience Level
             dbc.Row([
@@ -392,12 +392,11 @@ app.layout = dbc.Container([
                         value='all',
                         clearable=False
                     )
-                ], width=4, className="mb-3"),
+                ], width={"size": 12, "md": 4}, className="mb-3"),
             ], className="mb-4"),
             
-            # Rândul 2: Două coloane (Contract Types + Decomposition Tree)
+            # Rândul 2: Contract Types + Sunburst
             dbc.Row([
-                # Coloana 1: Contract Types by Experience Level
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4("📊 Contract Types by Experience Level", className="text-center mb-0")),
@@ -405,9 +404,8 @@ app.layout = dbc.Container([
                             dcc.Graph(id='career-contract-chart', style={'height': '450px'})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
-                # Coloana 2: Decomposition Tree (Sunburst)
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader([
@@ -436,12 +434,11 @@ app.layout = dbc.Container([
                             dcc.Graph(id='career-sunburst', style={'height': '450px'})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ], className="mb-4"),
             
-            # Rândul 3: Work Types by Experience Level + (al doilea Decomposition Tree - poate alt nivel)
+            # Rândul 3: Work Types + Sankey
             dbc.Row([
-                # Coloana 1: Work Types by Experience Level (Stacked Horizontal)
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4("📊 Work Types by Experience Level", className="text-center mb-0")),
@@ -449,9 +446,8 @@ app.layout = dbc.Container([
                             dcc.Graph(id='career-worktype-stacked', style={'height': '450px'})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
-                # Coloana 2: Sankey Diagram (Experience → Region → City)
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader([
@@ -479,13 +475,13 @@ app.layout = dbc.Container([
                             dcc.Graph(id='career-sankey', style={'height': '500px'})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
         ]),
 
         # Tab 6: Temporal Trends
         dbc.Tab(label="📈 Temporal Analysis", children=[
-            # Rândul 1: Filtre
+            # Rândul 1: Filtre (responsive)
             dbc.Row([
                 dbc.Col([
                     html.Label("Select Month:", className="fw-bold"),
@@ -496,7 +492,7 @@ app.layout = dbc.Container([
                         value='all',
                         clearable=False
                     )
-                ], width=5, className="mb-3"),
+                ], width={"size": 12, "md": 5}, className="mb-3"),
                 dbc.Col([
                     html.Label("Filter by Experience Level:", className="fw-bold"),
                     dcc.Dropdown(
@@ -506,7 +502,7 @@ app.layout = dbc.Container([
                         value='all',
                         clearable=False
                     )
-                ], width=5, className="mb-3"),
+                ], width={"size": 12, "md": 5}, className="mb-3"),
             ], className="mb-4"),
             
             # Rândul 2: Weekly Job Posting Trend (full width)
@@ -521,9 +517,8 @@ app.layout = dbc.Container([
                 ], width=12, className="mb-4"),
             ]),
             
-            # Rândul 3: Job Type Stacked (stânga) + Region Bar (dreapta)
+            # Rândul 3: Job Type Stacked + Region Bar
             dbc.Row([
-                # Coloana 1: Job Type Distribution by Month
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4("📊 Job Type Distribution by Month", className="text-center mb-0")),
@@ -531,9 +526,8 @@ app.layout = dbc.Container([
                             dcc.Graph(id='trends-jobtype-stacked', style={'height': '450px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
-                # Coloana 2: Job Distribution by Region (toate regiunile)
                 dbc.Col([
                     dbc.Card([
                         dbc.CardHeader(html.H4("📍 Job Distribution by Region", className="text-center mb-0")),
@@ -541,11 +535,11 @@ app.layout = dbc.Container([
                             dcc.Graph(id='trends-region-chart', style={'height': '450px'}, config={'displayModeBar': True})
                         ])
                     ], className="shadow-sm h-100")
-                ], width=6, className="mb-3"),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
         ]),
 
-        # Tab 7: Conclusions
+        # Tab 7: Conclusions (rămâne neschimbat - doar text)
         dbc.Tab(label="🎓 Conclusions", children=[
             dbc.Row([
                 dbc.Col([
@@ -585,7 +579,7 @@ app.layout = dbc.Container([
                         html.Li([html.Strong("SEO / SEM"), " - online visibility is key to success"]),
                         html.Li([html.Strong("IT / Technical Skills"), " - key differentiator for advancement"]),
                     ]),
-                ], width=6),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
                 dbc.Col([
                     html.H4("🌍 Language Requirements", className="mb-3"),
@@ -596,7 +590,7 @@ app.layout = dbc.Container([
                         html.Li("Bilingual candidates have a significant competitive advantage"),
                         html.Li("Startups and international companies are more flexible with language"),
                     ]),
-                ], width=6),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ], className="mb-4"),
             
             # Row 3: Contract & Experience
@@ -615,7 +609,7 @@ app.layout = dbc.Container([
                         html.Li([html.Strong("Entry level"), " has significant presence (~15%) - opportunities for graduates"]),
                         html.Li("Internships are limited - approximately 5% of the market"),
                     ]),
-                ], width=6),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
                 dbc.Col([
                     html.H4("🏢 Top Hiring Hubs", className="mb-3"),
@@ -626,7 +620,7 @@ app.layout = dbc.Container([
                         html.Li([html.Strong("North Rhine-Westphalia"), " - multiple cities (Cologne, Düsseldorf, Dortmund)"]),
                         html.Li("Frankfurt (Hesse) - financial and growing e-commerce hub"),
                     ]),
-                ], width=6),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ], className="mb-4"),
             
             # Row 4: Target Roles & Salary
@@ -640,7 +634,7 @@ app.layout = dbc.Container([
                         html.Li([html.Strong("Digital Marketing Manager"), " - marketing+tech combination"]),
                         html.Li([html.Strong("Sales Specialist / Category Manager"), " - commercial roles"]),
                     ]),
-                ], width=6),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
                 
                 dbc.Col([
                     html.H4("💰 Career Progression & Salary", className="mb-3"),
@@ -654,7 +648,7 @@ app.layout = dbc.Container([
                     ]),
                     html.P("Marketing and E-Commerce tracks have the best salary progression.", 
                         className="mt-2 text-muted small"),
-                ], width=6),
+                ], width={"size": 12, "md": 6}, className="mb-3"),
             ], className="mb-4"),
             
             # Row 5: Final Recommendations
@@ -695,8 +689,7 @@ app.layout = dbc.Container([
                             className="text-center text-muted small"), width=12),
             ], className="mt-3"),
         ]),
-     #End Tabs pentru navigare 
-    ]),
+    ]),  # End Tabs
     
     # Footer
     dbc.Row([

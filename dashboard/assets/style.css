@@ -54,3 +54,130 @@ h3, h4 {
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+/* ======================================== */
+/* RESPONSIVE DESIGN - PENTRU TELEFON */
+/* ======================================== */
+
+/* Meta viewport este deja adăugat în app = dash.Dash(meta_tags=...) */
+
+/* Pentru ecrane mici (telefoane) */
+@media (max-width: 768px) {
+    /* Container principal */
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    
+    /* Face coloanele full-width pe telefon */
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .col, .col-md-3, .col-md-4, .col-md-5, .col-md-6 {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+    
+    /* Micșorează fontul titlurilor */
+    h1 {
+        font-size: 1.5rem !important;
+    }
+    
+    h2 {
+        font-size: 1.3rem !important;
+    }
+    
+    h3, h4 {
+        font-size: 1.1rem !important;
+    }
+    
+    /* Face cardurile mai compacte */
+    .card-body {
+        padding: 0.75rem !important;
+    }
+    
+    .card-title {
+        font-size: 0.85rem !important;
+    }
+    
+    .card-text {
+        font-size: 1.3rem !important;
+    }
+    
+    /* Graficelor li se adaugă scroll orizontal */
+    .js-plotly-plot, .plotly-graph-div {
+        overflow-x: auto !important;
+    }
+    
+    /* Ascunde legendele prea lungi pe mobil sau le face mai mici */
+    .legend, .g-legend {
+        font-size: 9px !important;
+    }
+    
+    /* Face dropdown-urile mai accesibile */
+    .Select-control {
+        height: 38px !important;
+    }
+    
+    /* Micșorează padding-ul la tab-uri pentru a încăpea mai multe */
+    .nav-tabs {
+        font-size: 11px !important;
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        display: flex !important;
+    }
+    
+    .nav-item {
+        white-space: nowrap !important;
+    }
+    
+    .nav-link {
+        padding: 8px 6px !important;
+        font-size: 11px !important;
+    }
+    
+    /* Tooltip-urile să fie lizibile */
+    .tooltip-inner {
+        max-width: 250px !important;
+        font-size: 11px !important;
+        white-space: pre-line !important;
+    }
+    
+    /* Micșorează padding-ul la tab-uri */
+    .tab-content {
+        padding-top: 15px !important;
+    }
+    
+    /* Face filtrele mai compacte */
+    .mb-3 {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    /* Ajustează marginile la grafice */
+    .plot-container {
+        padding: 5px !important;
+        margin-bottom: 15px !important;
+    }
+}
+
+/* Pentru ecrane foarte mici (telefoane mici, < 480px) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2rem !important;
+    }
+    
+    .card-title {
+        font-size: 0.75rem !important;
+    }
+    
+    .card-text {
+        font-size: 1.1rem !important;
+    }
+    
+    .nav-link {
+        padding: 6px 4px !important;
+        font-size: 10px !important;
+    }
+}
