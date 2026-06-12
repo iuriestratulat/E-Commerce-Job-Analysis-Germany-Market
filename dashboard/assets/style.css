@@ -181,3 +181,45 @@ h3, h4 {
         font-size: 10px !important;
     }
 }
+
+/* va trebui de sters!!! */
+/* Fixează înălțimea graficelor pe mobil */
+@media (max-width: 768px) {
+    /* Forțează înălțimea maximă pentru containerul SVG */
+    .svg-container {
+        height: 400px !important;
+        min-height: 350px !important;
+        max-height: 450px !important;
+    }
+    
+    /* Asigură-te că părinții nu blochează */
+    .js-plotly-plot, .plotly-graph-div, .plot-container {
+        height: auto !important;
+        min-height: 350px !important;
+    }
+    
+    /* Limitează orice alt element intern */
+    .main-svg, .svg-container > svg {
+        max-height: 450px !important;
+        height: 400px !important;
+    }
+}
+/* Tab-uri scrollabile pe telefon (hamburger alternativ) */
+@media (max-width: 768px) {
+    .nav-tabs {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    
+    .nav-item {
+        display: inline-block !important;
+        float: none !important;
+    }
+    
+    .nav-link {
+        white-space: nowrap !important;
+    }
+}

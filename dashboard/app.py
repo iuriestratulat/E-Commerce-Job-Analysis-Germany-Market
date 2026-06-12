@@ -56,6 +56,10 @@ if not df.empty:
     print(f"Total joburi după curățare date: {len(df)}")
 # === SFÂRȘIT ANALIZĂ TEMPORALĂ ===
 
+# Variabilă pentru a stoca tab-ul activ
+from dash.dependencies import Input, Output, State
+import dash
+
 # Verificare date încărcate și creare DataFrame-uri
 if not df.empty:
     city_counts = get_city_counts(df)
@@ -98,17 +102,12 @@ print("=== DROPDOWN OPTIONS ===")
 experience_options = [{'label': 'All', 'value': 'all'}] + [{'label': l, 'value': l} for l in df['Experience'].unique()]
 print("Experience options:", experience_options)
 
-# Layout aplicație
-app.layout = dbc.Container([
-    dbc.Row([
-        dbc.Col(html.H1("E-Commerce Job Market Dashboard - Germany, November 2025", 
-                        className="text-center my-4"), width=12)
-    ]),
-    
-    # Tabs pentru navigare
-    dbc.Tabs([
-        # Tab 1: Prezentare generală
-        dbc.Tab(label="📊 Overview", children=[
+# ============================================================
+# FUNCȚIA PENTRU A OBȚINE CONȚINUTUL FIECĂRUI TAB
+# ============================================================
+def get_tab_content(tab_name):
+    if tab_name == "overview":
+        return [
             # Rândul 1: 4 carduri responsive (2x2 pe telefon, 4 pe desktop)
             dbc.Row([
                 dbc.Col(dbc.Card([
@@ -152,10 +151,10 @@ app.layout = dbc.Container([
                 dbc.Col(dcc.Graph(figure=create_job_source_chart(df)), 
                        width={"size": 12, "md": 6}),
             ]),
-        ]),   
-        
-        # Tab 2: Geographic Analysis - Versiunea cu carduri
-        dbc.Tab(label="🗺️ Geographic Analysis", children=[
+        ]
+    
+    elif tab_name == "geographic":
+        return [
             # Rândul 1: Filtre (2 coloane) - responsive
             dbc.Row([
                 dbc.Col([
@@ -200,10 +199,10 @@ app.layout = dbc.Container([
                     ], className="shadow-sm h-100")
                 ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
-        ]),
-
-        # Tab 3: Skills Analysis
-        dbc.Tab(label="🔧 Skills Analysis", children=[
+        ]
+    
+    elif tab_name == "skills":
+        return [
             # Rândul 1: Filtru Experience Level
             dbc.Row([
                 dbc.Col([
@@ -250,10 +249,10 @@ app.layout = dbc.Container([
                     ], className="shadow-sm")
                 ], width=12)
             ]),
-        ]),
-        
-        # Tab 4: Job Distribution
-        dbc.Tab(label="💼 Job Distribution", children=[
+        ]
+    
+    elif tab_name == "job":
+        return [
             # Rândul 1: Experience Level + Contract Type
             dbc.Row([
                 dbc.Col([
@@ -377,10 +376,10 @@ app.layout = dbc.Container([
                     ], className="shadow-sm h-100")
                 ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
-        ]),
-
-        # Tab 5: Career Progression
-        dbc.Tab(label="🎯 Career Progression", children=[
+        ]
+    
+    elif tab_name == "career":
+        return [
             # Rândul 1: Filtru Experience Level
             dbc.Row([
                 dbc.Col([
@@ -477,10 +476,10 @@ app.layout = dbc.Container([
                     ], className="shadow-sm h-100")
                 ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
-        ]),
-
-        # Tab 6: Temporal Trends
-        dbc.Tab(label="📈 Temporal Analysis", children=[
+        ]
+    
+    elif tab_name == "temporal":
+        return [
             # Rândul 1: Filtre (responsive)
             dbc.Row([
                 dbc.Col([
@@ -537,10 +536,10 @@ app.layout = dbc.Container([
                     ], className="shadow-sm h-100")
                 ], width={"size": 12, "md": 6}, className="mb-3"),
             ]),
-        ]),
-
-        # Tab 7: Conclusions (rămâne neschimbat - doar text)
-        dbc.Tab(label="🎓 Conclusions", children=[
+        ]
+    
+    else:  # conclusions
+        return [
             dbc.Row([
                 dbc.Col([
                     html.H3("E-Commerce Job Market Analysis - Key Takeaways for Graduates", 
@@ -688,8 +687,58 @@ app.layout = dbc.Container([
                 dbc.Col(html.P("Data source: LinkedIn, Glassdoor, Stepstone | Analysis based on 1,581 job postings | Dashboard built with Plotly Dash", 
                             className="text-center text-muted small"), width=12),
             ], className="mt-3"),
-        ]),
-    ]),  # End Tabs
+        ]
+
+
+# ============================================================
+# LAYOUT APLICAȚIEI CU MENIU HAMBURGER
+# ============================================================
+app.layout = dbc.Container([
+    dbc.Row([
+        dbc.Col(html.H1("E-Commerce Job Market Dashboard - Germany, November 2025", 
+                        className="text-center my-4"), width=12)
+    ]),
+    
+    # Meniu responsive: pe desktop arată ca tabs, pe telefon devine dropdown (hamburger)
+    dbc.Row([
+        dbc.Col([
+            # Desktop: tabs normale (vizibile doar pe md și mai mare)
+            html.Div([
+                dbc.Tabs([
+                    dbc.Tab(label="📊 Overview", tab_id="overview"),
+                    dbc.Tab(label="🗺️ Geographic Analysis", tab_id="geographic"),
+                    dbc.Tab(label="🔧 Skills Analysis", tab_id="skills"),
+                    dbc.Tab(label="💼 Job Distribution", tab_id="job"),
+                    dbc.Tab(label="🎯 Career Progression", tab_id="career"),
+                    dbc.Tab(label="📈 Temporal Analysis", tab_id="temporal"),
+                    dbc.Tab(label="🎓 Conclusions", tab_id="conclusions"),
+                ], id="tabs-desktop", active_tab="overview", className="d-none d-md-flex"),
+            ]),
+            
+            # Telefon: dropdown (vizibil doar pe mobil)
+            html.Div([
+                html.Label("📱 Select Section:", className="fw-bold mb-2"),
+                dcc.Dropdown(
+                    id="tabs-mobile",
+                    options=[
+                        {"label": "📊 Overview", "value": "overview"},
+                        {"label": "🗺️ Geographic Analysis", "value": "geographic"},
+                        {"label": "🔧 Skills Analysis", "value": "skills"},
+                        {"label": "💼 Job Distribution", "value": "job"},
+                        {"label": "🎯 Career Progression", "value": "career"},
+                        {"label": "📈 Temporal Analysis", "value": "temporal"},
+                        {"label": "🎓 Conclusions", "value": "conclusions"},
+                    ],
+                    value="overview",
+                    clearable=False,
+                    className="d-block d-md-none"
+                ),
+            ], className="mb-3 d-block d-md-none"),
+        ], width=12)
+    ]),
+    
+    # Containerul pentru conținut (se actualizează dinamic)
+    html.Div(id="tab-content-container", children=get_tab_content("overview")),
     
     # Footer
     dbc.Row([
@@ -699,7 +748,53 @@ app.layout = dbc.Container([
     ]),
 ], fluid=True)
 
-# Callbacks pentru update-uri interactive
+
+# ============================================================
+# CALLBACK-URI PENTRU MENIUL HAMBURGER
+# ============================================================
+# Callback pentru a actualiza conținutul când se schimbă tab-ul (pe orice dispozitiv)
+@callback(
+    Output("tab-content-container", "children"),
+    [Input("tabs-desktop", "active_tab"),
+     Input("tabs-mobile", "value")]
+)
+def update_tab_content(active_tab_desktop, active_tab_mobile):
+    # Determină care tab este activ (prioritate pentru desktop)
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        tab_id = "overview"
+    else:
+        triggered_id = ctx.triggered[0]["prop_id"].split(".")[0]
+        if triggered_id == "tabs-desktop":
+            tab_id = active_tab_desktop
+        else:
+            tab_id = active_tab_mobile
+    
+    # Returnează conținutul corespunzător
+    return get_tab_content(tab_id)
+
+
+# Callback pentru a sincroniza tabs între ele (desktop -> mobil)
+@callback(
+    Output("tabs-mobile", "value"),
+    Input("tabs-desktop", "active_tab")
+)
+def sync_desktop_to_mobile(active_tab):
+    return active_tab
+
+
+# Callback pentru a sincroniza tabs între ele (mobil -> desktop)
+@callback(
+    Output("tabs-desktop", "active_tab"),
+    Input("tabs-mobile", "value")
+)
+def sync_mobile_to_desktop(active_tab):
+    return active_tab
+
+
+# ============================================================
+# CALLBACK-URI PENTRU UPDATE-URI INTERACTIVE (EXISTENTE)
+# ============================================================
 # Tab 2 callbacks
 # Callback pentru harta regiunilor (bar chart)
 @callback(
@@ -756,10 +851,11 @@ def update_region_chart(exp_level, contract_type):
     
     return fig, title_text
 
+
 # Callback pentru harta cu bule (orașe)
 @callback(
     [Output('bubble-map', 'figure'),
-     Output('bubble-map-title', 'children')],  # ← nou Output pentru titlu
+     Output('bubble-map-title', 'children')],
     [Input('exp-filter-map', 'value'),
      Input('contract-filter-map', 'value')]
 )
@@ -809,7 +905,7 @@ def update_bubble_map(exp_level, contract_type):
         size='count',
         color='count',
         hover_name='city',
-        title='',  # Golim titlul deoarece avem în CardHeader
+        title='',
         color_continuous_scale='Viridis',
         size_max=50,
         zoom=5,
@@ -826,7 +922,8 @@ def update_bubble_map(exp_level, contract_type):
     
     fig.update_coloraxes(colorbar_title_text="Jobs")
     
-    return fig, title_text  # ← Returnează și titlul
+    return fig, title_text
+
 
 # Tab 3 callbacks
 # Callback pentru Top 15 Skills Bar Chart
@@ -880,6 +977,7 @@ def update_skills_bar(exp_level):
     
     return fig, title_text
 
+
 # Callback pentru Treemap
 @callback(
     Output('word-cloud-plot', 'figure'),
@@ -930,6 +1028,7 @@ def update_treemap(exp_level):
     )
     
     return fig
+
 
 # Callback pentru Skills Heatmap
 @callback(
@@ -990,6 +1089,7 @@ def update_skills_heatmap(exp_level):
     
     return fig
 
+
 # Tab 4 callbacks
 # Callback pentru Experience Level Distribution (Bar Chart)
 @callback(
@@ -1030,6 +1130,7 @@ def update_experience_chart(exp_level):
     fig.update_coloraxes(showscale=False)
     
     return fig
+
 
 # Callback pentru Contract Type Distribution (Donut Chart)
 @callback(
@@ -1084,6 +1185,7 @@ def update_contract_chart(exp_level):
     
     return fig
 
+
 # Callback pentru Work Type Distribution (Horizontal Bar Chart)
 @callback(
     Output('work-type-chart', 'figure'),
@@ -1123,6 +1225,7 @@ def update_work_type_chart(exp_level):
     fig.update_coloraxes(showscale=False)
     
     return fig
+
 
 # Callback pentru Company Market Share (Stacked Bar Chart - orizontal)
 @callback(
@@ -1198,14 +1301,14 @@ def update_company_market_share(exp_level):
         xaxis_title="",
         yaxis_title="Market Share (%)",
         legend=dict(
-            orientation='v',           # Verticală
-            yanchor='top',             # Ancorat sus
-            y=1.0,                     # Poziție sus
-            xanchor='left',            # Ancorat stânga
-            x=1.02,                    # Puțin în dreapta graficului
+            orientation='v',
+            yanchor='top',
+            y=1.0,
+            xanchor='left',
+            x=1.02,
             title=''
         ),
-        margin=dict(r=120, t=50, l=10, b=80),  # Spațiu pentru legendă și etichete
+        margin=dict(r=120, t=50, l=10, b=80),
         barmode='stack'
     )
     
@@ -1230,7 +1333,8 @@ def update_company_market_share(exp_level):
     
     return fig
 
-# Tab 5 callbasks 
+
+# Tab 5 callbacks 
 # Callback pentru Contract Types by Experience Level
 @callback(
     Output('career-contract-chart', 'figure'),
@@ -1264,16 +1368,17 @@ def update_career_contract_chart(exp_level):
         height=450, 
         xaxis={'tickangle': 45},
         legend=dict(
-            orientation='v',           # Verticală
-            yanchor='top',             # Ancorat sus
-            y=1,                       # Poziție sus
-            xanchor='left',            # Ancorat stânga
-            x=1.02,                    # În dreapta graficului
+            orientation='v',
+            yanchor='top',
+            y=1,
+            xanchor='left',
+            x=1.02,
             title='Contract Type'
         ),
-        margin=dict(r=150)             # Spațiu pentru legendă
+        margin=dict(r=150)
     )
     return fig
+
 
 # Callback pentru Work Types by Experience Level (sortat descrescător)
 @callback(
@@ -1319,6 +1424,7 @@ def update_career_worktype_stacked(exp_level):
     )
     return fig
 
+
 # Callback pentru primul Sunburst (Experience → WorkType → JobType)
 @callback(
     Output('career-sunburst', 'figure'),
@@ -1344,13 +1450,14 @@ def update_sunburst(exp_level):
         color='count',
         color_continuous_scale='Viridis',
         hover_data={'count': ':,.0f'},
-        labels={'count': 'Jobs'}  # ← Schimbă 'count' în 'Jobs'
+        labels={'count': 'Jobs'}
     )
     
     # Actualizează titlul colorbar-ului
     fig.update_coloraxes(colorbar_title_text="Jobs")
     fig.update_layout(height=450, margin=dict(t=0, l=0, r=0, b=0))
     return fig
+
 
 # Callback pentru Sankey - Top 5 Regiuni și Top 5 Orașe per Regiune
 @callback(
@@ -1451,7 +1558,8 @@ def update_sankey(exp_level):
     
     return fig
 
-# Tab 6 callbasks
+
+# Tab 6 callbacks
 # Callback pentru Weekly Job Posting Trend (Last 6 Months)
 @callback(
     Output('trends-jobtype-stacked', 'figure'),
@@ -1488,20 +1596,21 @@ def update_trends_jobtype(selected_month, exp_level):
     fig.update_layout(
         height=350,
         title_x=0.5,
-        xaxis_title="",  # ← Eliminat titlul axei X
+        xaxis_title="",
         yaxis_title="Number of Jobs",
         legend=dict(
-            orientation='v',           # Verticală
-            yanchor='top',             # Ancorat sus
-            y=1,                       # Poziție sus
-            xanchor='left',            # Ancorat stânga
-            x=1.02,                    # În dreapta graficului
+            orientation='v',
+            yanchor='top',
+            y=1,
+            xanchor='left',
+            x=1.02,
             title='Contract Type'
         ),
-        margin=dict(r=120)             # Spațiu pentru legendă
+        margin=dict(r=120)
     )
     
     return fig
+
 
 @callback(
     Output('trends-line-chart', 'figure'),
@@ -1544,6 +1653,7 @@ def update_trends_line(selected_month, exp_level):
     fig.update_traces(marker=dict(size=4), line=dict(width=2))
     
     return fig
+
 
 # Callback pentru Region Distribution (TOATE regiunile, fără limită)
 @callback(
@@ -1592,6 +1702,7 @@ def update_trends_region(selected_month, exp_level):
     
     return fig
 
+
 @callback(
     Output('job-titles-chart', 'figure'),
     Input('dept-filter', 'value')
@@ -1618,6 +1729,7 @@ def update_job_titles(dept):
     
     fig.update_layout(height=500, title_x=0.5)
     return fig
+
 
 @callback(
     Output('test-map-output', 'figure'),
@@ -1648,7 +1760,7 @@ def test_map(exp_level):
     return fig
 
 
-server = app.server # Necesar pentru gunicorn pe Render
+server = app.server  # Necesar pentru gunicorn pe Render
 
 if __name__ == '__main__':
     app.run(debug=True, dev_tools_ui=False, dev_tools_props_check=False)
