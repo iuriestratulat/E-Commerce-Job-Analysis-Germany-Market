@@ -1,0 +1,9 @@
+.\git_push.bat
+git add .
+git commit -m "Refactor: Split app.py into modular structure
+
+- Move tab content to tab_content.py
+- Split callbacks into separate files by category
+- Reduce app.py from 1766 to ~250 lines
+- Improve code maintainability and readability"
+git push 

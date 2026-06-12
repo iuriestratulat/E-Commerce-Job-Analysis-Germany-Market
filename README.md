@@ -75,41 +75,55 @@ e-commerce-job-analysis/
 │   │   ├── skills_components.py            # Skills analysis (treemap, heatmap)
 │   │   └── temporal_components.py          # Time-based trends charts
 │   ├── assets/                             # Static files
-│   │   └── style.css                       # Custom CSS styling
+│   │   └── style.css                       # Custom CSS styling for responsive design
+│   │
+│   ├── callbacks/                          # Modular callback functions for each tab
+│   │   ├── __init__.py                     # Makes 'callbacks' a Python package
+│   │   ├── career_callbacks.py             # Callbacks for Career Progression tab (sunburst, sankey, stacked charts)
+│   │   ├── geographic_callbacks.py         # Callbacks for Geographic Analysis tab (region bars, bubble maps)
+│   │   ├── job_callbacks.py                # Callbacks for Job Distribution tab (experience, contract, work type, market share)
+│   │   ├── skills_callbacks.py             # Callbacks for Skills Analysis tab (bar chart, treemap, heatmap)
+│   │   └── temporal_callbacks.py           # Callbacks for Temporal Analysis tab (weekly trends, stacked bars, region distribution)
+│   │
 │   ├── data/                               # Dashboard datasets
-│   │   ├── city_coordinates.json           # City coordinates for maps
-│   │   └── E_Commers_jobs_done.json        # Final cleaned dataset (1,581 jobs)
-│   ├── app.py                              # Main Dash application entry point
-│   ├── data_loader.py                      # Data loading utilities
-│   └── requirements.txt                    # Python dependencies
+│   │   ├── city_coordinates.json           # City coordinates for bubble maps (lat/lon for German cities)
+│   │   └── E_Commers_jobs_done.json        # Final cleaned dataset (1,581 job postings)
+│   │
+│   ├── app.py                              # Main Dash application entry point (~250 lines after refactoring)
+│   ├── data_loader.py                      # Data loading utilities (load_data, get_city_counts, get_skills_dataframe, etc.)
+│   ├── tab_content.py                      # Dynamic content generator for all 7 tabs (returns HTML/Dash components)
+│   └── requirements.txt                    # Python dependencies (dash, plotly, pandas, gunicorn, etc.)
 │
-├── ecommerce_pipeline/                                 # ETL data processing pipeline
-│   ├── data/                                           # Data storage
-│   │   ├── helpers/                                    # Helper files for data processing
-│   │   │   ├── unique_skills_combined.json             # Master list of unique skills (605)
-│   │   │   ├── job_title.json                          # Relevant job titles for filtering
-│   │   │   ├── statistics.json                         # Generated statistics from analysis
-│   │   │   └── location_reports/                       # Location analysis reports
-│   │   │       ├── incomplete_locations.json           # Jobs missing region data
-│   │   │       └── location_analysis.json              # Location format analysis
-│   │   ├── processed/                                  # Cleaned, step-by-step data
-│   │   │   ├── 01_e_commers_jobs.json                  # Step 1: Raw normalized jobs
-│   │   │   ├── 02_e_commers_jobs_with_skills.json      # Step 2: Skills extracted
-│   │   │   ├── 03_e_commers_jobs_filtered.json         # Step 3: Filtered by title
-│   │   │   ├── 04_e_commers_jobs_locations_split.json  # Step 4: Locations split
-│   │   │   └── 05_e_commers_jobs_final.json            # Step 5: Final clean data
-│   │   └── raw/                                        # Raw source data
-│   │       ├── dataset_linkedin_e_com.json             # LinkedIn raw jobs
-│   │       ├── dataset_glassdoor_e_com.json            # Glassdoor raw jobs
-│   │       └── dataset_stepstone_e_com.json            # Stepstone raw jobs
-│   └── e_commerces_etl.py                              # Complete ETL pipeline script
+├── ecommerce_pipeline/                     # ETL data processing pipeline (separate from dashboard)
+│   ├── data/                               # Data storage for ETL pipeline
+│   │   ├── helpers/                        # Helper files for data processing
+│   │   │   ├── unique_skills_combined.json # Master list of unique skills (605 distinct skills)
+│   │   │   ├── job_title.json              # Relevant job titles for filtering e-commerce roles
+│   │   │   ├── statistics.json             # Generated statistics from analysis
+│   │   │   └── location_reports/           # Location analysis reports
+│   │   │       ├── incomplete_locations.json # Jobs missing region data for debugging
+│   │   │       └── location_analysis.json  # Location format analysis for data cleaning
+│   │   │
+│   │   ├── processed/                      # Cleaned, step-by-step data (5-step pipeline)
+│   │   │   ├── 01_e_commers_jobs.json      # Step 1: Raw normalized jobs from all sources
+│   │   │   ├── 02_e_commers_jobs_with_skills.json # Step 2: Skills extracted from descriptions
+│   │   │   ├── 03_e_commers_jobs_filtered.json    # Step 3: Filtered by relevant job titles
+│   │   │   ├── 04_e_commers_jobs_locations_split.json # Step 4: Locations split into city/region
+│   │   │   └── 05_e_commers_jobs_final.json # Step 5: Final clean data ready for dashboard
+│   │   │
+│   │   └── raw/                            # Raw source data from job platforms
+│   │       ├── dataset_linkedin_e_com.json # LinkedIn raw jobs (primary source)
+│   │       ├── dataset_glassdoor_e_com.json # Glassdoor raw jobs (secondary source)
+│   │       └── dataset_stepstone_e_com.json # Stepstone raw jobs (tertiary source)
+│   │
+│   └── e_commerces_etl.py                  # Complete ETL pipeline script (data extraction, transformation, loading)
 │
-├── notebooks/                                          # Jupyter notebooks for exploration
-│   └── E_Commers_Analysis.ipynb                        # Main analysis notebook
+├── notebooks/                              # Jupyter notebooks for data exploration
+│   └── E_Commers_Analysis.ipynb            # Main analysis notebook (EDA, statistics, visualizations)
 │
-├── runway/                                             # Legacy/backup files (git ignored)
-├── .gitignore                                          # Git ignore rules
-└── LICENSE                                             # MIT License
+├── runway/                                 # Legacy/backup files (git ignored, not for production)
+├── .gitignore                              # Git ignore rules (excludes runway/, __pycache__/, etc.)
+└── LICENSE                                 # MIT License
  ```
 
 ---
