@@ -5,98 +5,130 @@ import pandas as pd
 
 def get_responsive_navbar():
     """
-    Creates a fully functional responsive top navigation bar.
-    Forces both icons and text labels to remain visible on all screen sizes.
-    """
-    return dbc.Navbar(
-        dbc.Container([
-            # Brand/Title on the left
-            dbc.NavbarBrand("E-Commerce Job Dashboard", href="#", className="ms-2 fw-bold text-white fs-5"),
-            
-            # The Hamburger Button (visible ONLY on mobile/small screens)
-            dbc.NavbarToggler(id="navbar-toggler", n_clicks=0, className="border-light"),
-            
-            # The Collapsible Menu content
-            dbc.Collapse(
-                dbc.Nav([  
-                    dbc.NavItem(dbc.NavLink([html.Span("📊 Overview", className="text-white")], href="#", id="tab-overview-link", active=True, className="px-3")),
-                    dbc.NavItem(dbc.NavLink([html.Span("🗺️ Geographic Analysis", className="text-white")], href="#", id="tab-geo-link", className="px-3")),
-                    dbc.NavItem(dbc.NavLink([html.Span("🔧 Skills Analysis", className="text-white")], href="#", id="tab-skills-link", className="px-3")),
-                    dbc.NavItem(dbc.NavLink([html.Span("💼 Job Distribution", className="text-white")], href="#", id="tab-jobs-link", className="px-3")),
-                    dbc.NavItem(dbc.NavLink([html.Span("🎯 Career Progression", className="text-white")], href="#", id="tab-career-link", className="px-3")),
-                    dbc.NavItem(dbc.NavLink([html.Span("📈 Temporal Analysis", className="text-white")], href="#", id="tab-temporal-link", className="px-3")),
-                    dbc.NavItem(dbc.NavLink([html.Span("🎓 Conclusions", className="text-white")], href="#", id="tab-conclusions-link", className="px-3")),
-                ], 
-                className="ms-auto", # Pushes the menu items to the right on desktop
-                navbar=True),
-                id="navbar-collapse",
-                navbar=True,
-                is_open=False # Closed by default on mobile
-            ),
-        ], fluid=True),
-        color="primary",
-        dark=True,
-        className="mb-4 rounded-bottom shadow-sm py-2",
-    )
-
-def render_overview_tab(df, top_city, top_city_count, top_skill, top_job, skills_df, create_skills_bar_chart, create_contract_type_chart, create_top_companies_chart, create_job_source_chart):
-    """
-    Generates the HTML layout for the Overview Tab.
-    Cards and charts automatically stack vertically on mobile (xs=12).
+    Creates a dual-bar navigation system:
+    1. A top header bar exclusively for the dashboard title.
+    2. A secondary navigation bar for the tabs, aligned to the left and 
+       collapsible into a hamburger menu on mobile.
     """
     return html.Div([
-        # Row 1: 4 Key Performance Indicator (KPI) Cards
-        dbc.Row([
-            dbc.Col(dbc.Card([
-                dbc.CardBody([
-                    html.H5("Total Jobs Analyzed", className="card-title text-muted"),
-                    html.H2(f"{len(df):,}", className="card-text text-primary fw-bold")
-                ])
-            ], color="light", className="shadow-sm mb-3"), xs=12, sm=6, md=3),
-            
-            dbc.Col(dbc.Card([
-                dbc.CardBody([
-                    html.H5("Time Period", className="card-title text-muted"),
-                    html.H2("Last 6 Months", className="card-text text-success fw-bold")
-                ])
-            ], color="light", className="shadow-sm mb-3"), xs=12, sm=6, md=3),
-            
-            dbc.Col(dbc.Card([
-                dbc.CardBody([
-                    html.H5("Top City", className="card-title text-muted"),
-                    html.H2(f"{top_city}", className="card-text text-info fw-bold")
-                ])
-            ], color="light", className="shadow-sm mb-3"), xs=12, sm=6, md=3),
-            
-            dbc.Col(dbc.Card([
-                dbc.CardBody([
-                    html.H5("Top Skill", className="card-title text-muted"),
-                    html.H2(f"{top_skill}", className="card-text text-warning fw-bold")
-                ])
-            ], color="light", className="shadow-sm mb-3"), xs=12, sm=6, md=3),
-        ], className="g-3 mb-4"),
+        # BRAND HEADER BAR (Top Bar - Title Only)
+        html.Div(
+            dbc.Container(
+                html.H1("E-commerce Job Market Analysis - Germany, November 2025", className="text-white fw-bold fs-4 m-0 py-2 text-center text-md-start"),
+                fluid=True
+            ),
+            className="bg-primary border-bottom border-light border-opacity-10 py-1"
+        ),
         
-        # Row 2: Top Skills + Contract Type Charts
+        # NAVIGATION TABS BAR (Bottom Bar - Tabs Menu)
+        dbc.Navbar(
+            dbc.Container([
+                # 📱 Text label visible ONLY on mobile to fill the empty space on the left
+                html.Span(
+                    "📊 Select Analysis Tab", 
+                    className="text-white fw-medium d-block d-md-none ps-2"
+                ),
+                
+                # The Hamburger Button for mobile
+                dbc.NavbarToggler(id="navbar-toggler", n_clicks=0, className="border-light"),
+                
+                # Collapsible Tabs Menu (Aligned to the left on desktop)
+                dbc.Collapse(
+                    dbc.Nav([
+                        dbc.NavItem(dbc.NavLink("📊 Overview", href="#", id="tab-overview-link", active=True, className="text-white px-3 nav-link-custom")),
+                        dbc.NavItem(dbc.NavLink("🗺️ Geographic Analysis", href="#", id="tab-geo-link", className="text-white px-3 nav-link-custom")),
+                        dbc.NavItem(dbc.NavLink("🔧 Skills Analysis", href="#", id="tab-skills-link", className="text-white px-3 nav-link-custom")),
+                        dbc.NavItem(dbc.NavLink("💼 Job Distribution", href="#", id="tab-jobs-link", className="text-white px-3 nav-link-custom")),
+                        dbc.NavItem(dbc.NavLink("🎯 Career Progression", href="#", id="tab-career-link", className="text-white px-3 nav-link-custom")),
+                        dbc.NavItem(dbc.NavLink("📈 Temporal Analysis", href="#", id="tab-temporal-link", className="text-white px-3 nav-link-custom")),
+                        dbc.NavItem(dbc.NavLink("🎓 Conclusions", href="#", id="tab-conclusions-link", className="text-white px-3 nav-link-custom")),
+                    ], 
+                    className="me-auto justify-content-start flex-column flex-md-row w-100", 
+                    navbar=True),
+                    id="navbar-collapse",
+                    navbar=True,
+                    is_open=False
+                ),
+            ], fluid=True),
+            color="primary",
+            dark=True,
+            className="mb-4 rounded-bottom shadow-sm py-1",
+        )
+    ])
+
+def render_overview_tab(df, top_city, top_city_count, top_skill, top_job, 
+                        skills_df, create_skills_bar_chart, create_contract_type_chart, 
+                        create_top_companies_chart, create_job_source_chart):
+    """Generates the content for the Overview tab with responsive KPI cards."""
+    return html.Div([
+        # 📱 Responsive Alert Note for Mobile Users
+        dbc.Alert(
+            [
+                html.I(className="bi bi-info-circle-fill me-2"),
+                "📱 The app works on all devices. If you access it from your phone, ",
+                html.Strong("rotate the device (Landscape)"),
+                " for better visibility of the charts."
+            ],
+            color="info",
+            className="d-block d-md-none text-center mb-3 shadow-sm py-2 px-3 fw-medium rounded",
+        ),
+
+        # KPI Summary Cards (xs=12 makes them stack on mobile, md=3 places them side by side)
         dbc.Row([
             dbc.Col(dbc.Card([
-                dbc.CardBody([dcc.Graph(figure=create_skills_bar_chart(skills_df), config={'responsive': True})])
-            ], className="shadow-sm mb-3"), xs=12, md=6),
+                dbc.CardBody([
+                    html.H6("Total Jobs Analyzed", className="card-title text-muted fs-7 mb-1"),
+                    html.H3(f"{len(df):,}", className="card-text fw-bold text-primary")
+                ])
+            ], className="mb-3 border-0 shadow-sm rounded"), xs=12, md=3),
             
             dbc.Col(dbc.Card([
-                dbc.CardBody([dcc.Graph(figure=create_contract_type_chart(df), config={'responsive': True})])
-            ], className="shadow-sm mb-3"), xs=12, md=6),
-        ], className="g-3 mb-4"),
-        
-        # Row 3: Top Companies + Job Source Distribution Charts
+                dbc.CardBody([
+                    html.H6("Time Period", className="card-title text-muted fs-7 mb-1"),
+                    html.H3("Last 6 Months", className="card-text fw-bold text-success")
+                ])
+            ], className="mb-3 border-0 shadow-sm rounded"), xs=12, md=3),
+            
+            dbc.Col(dbc.Card([
+                dbc.CardBody([
+                    html.H6("Top City", className="card-title text-muted fs-7 mb-1"),
+                    html.H3(top_city, className="card-text fw-bold text-info text-truncate")
+                ])
+            ], className="mb-3 border-0 shadow-sm rounded"), xs=12, md=3),
+            
+            dbc.Col(dbc.Card([
+                dbc.CardBody([
+                    html.H6("Top Skill", className="card-title text-muted fs-7 mb-1"),
+                    html.H3(top_skill, className="card-text fw-bold text-warning text-truncate")
+                ])
+            ], className="mb-3 border-0 shadow-sm rounded"), xs=12, md=3),
+        ], className="mb-2"),
+
+        # Row 1: Charts
         dbc.Row([
             dbc.Col(dbc.Card([
-                dbc.CardBody([dcc.Graph(figure=create_top_companies_chart(df), config={'responsive': True})])
-            ], className="shadow-sm mb-3"), xs=12, md=6),
+                dbc.CardHeader("💡 Market Overview", className="fw-bold fs-6 text-dark bg-transparent border-0 pt-3 pb-0"),
+                dbc.CardBody(dcc.Graph(figure=create_skills_bar_chart(skills_df), config={'displayModeBar': False}))
+            ], className="mb-4 border-0 shadow-sm rounded"), xs=12, md=6),
             
             dbc.Col(dbc.Card([
-                dbc.CardBody([dcc.Graph(figure=create_job_source_chart(df), config={'responsive': True})])
-            ], className="shadow-sm mb-3"), xs=12, md=6),
-        ], className="g-3")
+                dbc.CardHeader("📊 Contract Types", className="fw-bold fs-6 text-dark bg-transparent border-0 pt-3 pb-0"),
+                dbc.CardBody(dcc.Graph(figure=create_contract_type_chart(df), config={'displayModeBar': False}))
+            ], className="mb-4 border-0 shadow-sm rounded"), xs=12, md=6),
+        ]),
+
+        # Row 2: Charts
+        dbc.Row([
+            dbc.Col(dbc.Card([
+                dbc.CardHeader("🏢 Top Companies", className="fw-bold fs-6 text-dark bg-transparent border-0 pt-3 pb-0"),
+                dbc.CardBody(dcc.Graph(figure=create_top_companies_chart(df), config={'displayModeBar': False}))
+            ], className="mb-4 border-0 shadow-sm rounded"), xs=12, md=6),
+            
+            dbc.Col(dbc.Card([
+                dbc.CardHeader("🔌 Job Sources", className="fw-bold fs-6 text-dark bg-transparent border-0 pt-3 pb-0"),
+                dbc.CardBody(dcc.Graph(figure=create_job_source_chart(df), config={'displayModeBar': False}))
+            ], className="mb-4 border-0 shadow-sm rounded"), xs=12, md=6),
+        ]),
     ])
 
 def render_geographic_tab(df):

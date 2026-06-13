@@ -7,7 +7,7 @@ echo =======================================
 git add .
 
 :: 2. Creaza commit-ul cu mesajul tau structurat
-git commit -m "Refactor: Split app.py into modular structure. Moved layout to tab_content.py and callbacks to separate package. Reduced lines and fixed mobile styles."
+git commit -m "Adjusting tab visibility for small-screen devices and (README) changing the link to the Render app."
 
 :: 3. Trimite codul pe GitHub
 git push

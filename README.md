@@ -1,13 +1,13 @@
 # 📊 E-Commerce Job Market Dashboard - Germany 2025
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-https://e--commerce--job--analysis.onrender.com-2ea44f?style=for-the-badge&logo=render)](https://e-commerce-job-analysis.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-https://e--commerce--job--analysis.onrender.com-2ea44f?style=for-the-badge&logo=render)](https://e-commerce-job-analysis-germany-market.onrender.com/)
 [![Python](https://img.shields.io/badge/Python-3.13-blue.svg?style=flat&logo=python)](https://www.python.org/)
 [![Dash](https://img.shields.io/badge/Dash-2.16.0-blue.svg?style=flat&logo=plotly)](https://plotly.com/dash/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
 
 ## 🚀 Live Dashboard
 
-**👉 [Click to view the interactive dashboard](https://e-commerce-job-analysis.onrender.com)**
+**👉 [Click to view the interactive dashboard](https://e-commerce-job-analysis-germany-market.onrender.com/)**
 
 > ⚡ *Note: The first load may take 15-30 seconds as the free tier service wakes up.*
 

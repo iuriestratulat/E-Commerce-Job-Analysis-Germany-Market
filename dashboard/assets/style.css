@@ -108,3 +108,91 @@ h3, h4 {
         padding-right: 8px !important;
     }
 }
+
+/* ==================================================== */
+/* CENTERING BRAND TITLE & STYLING ACTIVE NAVIGATION TABS */
+/* ==================================================== */
+
+/* Centrarea titlului pe desktop și alinierea lui curată */
+@media (min-width: 768px) {
+    .navbar-custom-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0 !important;
+    }
+}
+
+/* Stil de bază pentru link-urile din navigație */
+.nav-link-custom {
+    transition: all 0.3s ease-in-out;
+    border-radius: 4px;
+    margin: 2px 4px;
+    font-weight: 500;
+    opacity: 0.75; /* Celelalte tab-uri devin mai discrete/întunecate implicit */
+}
+
+/* Efect de hover pe tab-uri */
+.nav-link-custom:hover {
+    opacity: 1 !important;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* EVIDENȚIEREA TAB-ULUI ACTIV: Fundal contrastant și linie luminoasă dedesubt */
+.nav-link-custom.active {
+    opacity: 1 !important;
+    background-color: rgba(0, 0, 0, 0.25) !important; /* Fundal mai închis pentru contrast */
+    color: #fff !important;
+    box-shadow: 0 3px 0 0 #fff !important; /* Linie albă dedesubt pentru a indica tab-ul activ */
+}
+
+/* Pe mobil eliminăm linia de sub tab-ul activ și lăsăm doar fundalul distinct */
+@media (max-width: 767px) {
+    .nav-link-custom.active {
+        box-shadow: none !important;
+        border-left: 4px solid #fff !important; /* Linie în stânga pe mobil pentru un aspect nativ */
+        padding-left: 12px !important;
+    }
+}
+
+/* ==================================================== */
+/* STYLING FOR DUAL-BAR NAVIGATION & ACTIVE TABS        */
+/* ==================================================== */
+
+/* Stil general pentru link-urile din navigație */
+.nav-link-custom {
+    transition: all 0.2s ease-in-out;
+    border-radius: 4px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7) !important; /* Tab-urile inactive sunt mai discrete */
+    opacity: 0.8;
+}
+
+/* Efect de hover pe tab-uri */
+.nav-link-custom:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    opacity: 1;
+}
+
+/* EVIDENȚIEREA VIZUALĂ A TAB-ULUI ACTIV */
+.nav-link-custom.active {
+    color: #ffffff !important; /* Text alb curat */
+    background-color: rgba(0, 0, 0, 0.25) !important; /* Fundal mai închis pentru contrast */
+    box-shadow: 0 3px 0 0 #ffffff !important; /* Linie albă luminoasă dedesubt pe desktop */
+    opacity: 1 !important;
+}
+
+/* Ajustări speciale pentru mobil (ecrane sub 768px) */
+@media (max-width: 767px) {
+    .nav-link-custom.active {
+        box-shadow: none !important; /* Eliminăm linia de jos pe mobil */
+        border-left: 4px solid #ffffff !important; /* Adăugăm linie în stânga în meniul vertical dropdown */
+        padding-left: 16px !important;
+    }
+    
+    .nav-link-custom {
+        margin: 4px 0;
+        width: 100%;
+    }
+}
